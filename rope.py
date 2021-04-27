@@ -1,121 +1,112 @@
-class Rope:
-  # Note: depending on your implementation, you may want to to change this constructor
-  def __init__(self, text, size = None):
-    self.text = text
-    self.size = size
-    self.left = None
-    self.right = None
+class RopeLeaf:
+    # Note: depending on your implementation, you may want to to change this constructor
+    def __init__(self, text):
+        self.text = text
 
-  # just prints the stored text
-  # note that you may want to change this, depending on your implementation  
-  def to_string(self):
-    leftText =  self.left.to_string() if self.left else  ''
-    rightText = self.right.to_string() if self.right else  ''
-    return leftText + self.text + rightText
+    def to_string(self):
+        return self.text
 
-  # how deep the tree is (I.e. the maximum depth of children)
-  def depth(self):
-    return 1 + max(self.left_depth(), self.right_depth())
+    # how deep the tree is (I.e. the maximum depth of children)
+    def depth(self):
+        return 1
 
-  # Whether the rope is balanced, i.e. whether any subtrees have branches
-  # which differ by more than one in depth. 
-  def is_balanced(self): 
-    leftBalanced =  self.left.is_balanced() if self.left else True
-    rightBalanced = self.right.is_balanced() if self.right else True
+    # Whether the rope is balanced, i.e. whether any subtrees have branches
+    # which differ by more than one in depth.
+    def is_balanced(self):
+        return True
 
-    return leftBalanced and rightBalanced and abs(self.left_depth() - self.right_depth()) < 2
+    # Helper method which converts the rope into an associative array
+    #
+    # Only used for debugging, this has no functional purpose
+    def to_dictionary(self):
+        return {
+            "text": self.text,
+        }
 
-  def left_depth(self): 
-    if (not self.left): 
-      return 0
-    return self.left.depth()
+    def size(self):
+        return len(self.text)
 
-  def right_depth(self): 
-    if (not self.right): 
-      return 0
-    return self.right.depth()
 
-  # Helper method which converts the rope into an associative array
-  # 
-  # Only used for debugging, this has no functional purpose
-  def to_dictionary(self):
-    mapVersion = {
-      'text': self.text,
-      'size': self.size
-    }
-    if (self.right):
-      mapVersion['right'] = self.right.to_dictionary()
-    if (self.left):
-      mapVersion['left'] = self.left.to_dictionary()
-    return mapVersion
+class RopeBranch:
+    # Note: depending on your implementation, you may want to to change this constructor
+    def __init__(self, left, right):
+        self.left = left
+        self.right = right
+        self.cachedSize = (left.size() if left else 0) + (right.size() if right else 0)
 
-def create_rope_from_map(map): 
-  rope = Rope(map.get('text'), map.get('size'))
-  if 'left' in map: 
-    rope.left = create_rope_from_map(map['left'])
-  if 'right' in map: 
-    rope.right = create_rope_from_map(map['right'])
-  return rope
+    # just prints the stored text
+    # note that you may want to change this, depending on your implementation
+    def to_string(self):
+        leftText = self.left.to_string() if self.left else ""
+        rightText = self.right.to_string() if self.right else ""
+        return leftText + rightText
 
-# This is an internal API. You can implement it however you want. 
-# (E.g. you can choose to mutate the input rope or not)
-def split_at(rope, position):
-  # TODO
-  pass
+    # how deep the tree is (I.e. the maximum depth of children)
+    def depth(self):
+        return 1 + max(self.left_depth(), self.right_depth())
 
+    # Whether the rope is balanced, i.e. whether any subtrees have branches
+    # which differ by more than one in depth.
+    def is_balanced(self):
+        leftBalanced = self.left.is_balanced() if self.left else True
+        rightBalanced = self.right.is_balanced() if self.right else True
+
+        return (
+            leftBalanced
+            and rightBalanced
+            and abs(self.left_depth() - self.right_depth()) < 2
+        )
+
+    def left_depth(self):
+        if not self.left:
+            return 0
+        return self.left.depth()
+
+    def right_depth(self):
+        if not self.right:
+            return 0
+        return self.right.depth()
+
+    def size(self):
+        return self.cachedSize
+
+    # Helper method which converts the rope into an associative array
+    #
+    # Only used for debugging, this has no functional purpose
+    def to_dictionary(self):
+        mapVersion = {"size": self.size()}
+        if self.right:
+            mapVersion["right"] = self.right.to_dictionary()
+        if self.left:
+            mapVersion["left"] = self.left.to_dictionary()
+        return mapVersion
+
+
+def create_rope_from_map(map):
+    if map.get("text") is not None:
+        return RopeLeaf(map.get("text"))
+
+    left = None
+    right = None
+    if "left" in map:
+        left = create_rope_from_map(map["left"])
+    if "right" in map:
+        right = create_rope_from_map(map["right"])
+    return RopeBranch(left, right)
+
+
+# Note: Depending on your implementation, you might want to
+# change these to be instance methods on the rope
 def delete_range(rope, start, end):
-  # TODO
-  pass
+    # TODO
+    pass
 
-def insert(rope, text, location): 
-  # TODO
-  pass
+
+def insert(rope, text, location):
+    # TODO
+    pass
+
 
 def rebalance(rope):
-  # TODO
-  pass
-
-'''
- Rotates a tree: used for rebalancing.
-
- Turns:
-    b
-  /  \
-  a   c
-
-  Into:
-     c
-    /
-   b
-  /
-a
-'''
-def rotate_left(rope):
-  newParent = rope.right
-  newLeft = rope
-  newLeft.right = newParent.left
-  newParent.left = newLeft
-  return newParent
-
-'''
-/*
- Rotates a tree: used for rebalancing.
-
- Turns:
-    b
-  /  \
-  a   c
-
-  Into:
-     a
-      \
-       b
-        \
-         c 
-'''
-def rotate_right(rope):
-  newParent = rope.left
-  newRight = rope
-  newRight.left = newParent.right
-  newParent.right = newRight
-  return newParent
+    # TODO
+    pass
