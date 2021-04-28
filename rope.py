@@ -67,6 +67,8 @@ class RopeBranch:
             return 0
         return self.right.depth()
 
+    # Please note that this is defined differently from "weight" in the Wikipedia article.
+    # You may wish to rewrite this method or create a different one.
     def size(self):
         return self.cachedSize
 
