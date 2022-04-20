@@ -99,6 +99,10 @@ def create_rope_from_map(map):
 
 # Note: Depending on your implementation, you might want to
 # change these to be instance methods on the rope
+def split_at(rope, start, end):
+    # TODO
+    pass
+
 def delete_range(rope, start, end):
     # TODO
     pass
