@@ -3,7 +3,7 @@ class RopeLeaf:
     def __init__(self, text):
         self.text = text
 
-    def to_string(self):
+    def __str__(self):
         return self.text
 
     # how deep the tree is (I.e. the maximum depth of children)
@@ -32,13 +32,16 @@ class RopeBranch:
     def __init__(self, left, right):
         self.left = left
         self.right = right
+
+        # Please note that this is defined differently from "weight" in the Wikipedia article.
+        # You may wish to rewrite this property or create a different one.
         self.cachedSize = (left.size() if left else 0) + (right.size() if right else 0)
 
     # just prints the stored text
     # note that you may want to change this, depending on your implementation
-    def to_string(self):
-        leftText = self.left.to_string() if self.left else ""
-        rightText = self.right.to_string() if self.right else ""
+    def __str__(self):
+        leftText = str(self.left) if self.left else ""
+        rightText = str(self.right) if self.right else ""
         return leftText + rightText
 
     # how deep the tree is (I.e. the maximum depth of children)

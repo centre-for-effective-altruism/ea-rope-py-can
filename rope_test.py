@@ -9,7 +9,7 @@ def create_leaf(text):
 # These tests are here as a starting point, they are not comprehensive
 class Testing(unittest.TestCase):
     def test_rope_basics(self):
-        self.assertEqual(create_leaf("test").to_string(), "test")
+        self.assertEqual(str(create_leaf("test")), "test")
         self.assertEqual(create_leaf("test").size(), 4)
         branch = create_rope_from_map(
             {
@@ -20,18 +20,18 @@ class Testing(unittest.TestCase):
                 "right": {"right": {"text": "st"}},
             }
         )
-        self.assertEqual(branch.to_string(), "test")
+        self.assertEqual(str(branch), "test")
         self.assertEqual(branch.size(), 4)
 
     def test_deletion(self):
-        self.assertEqual(delete_range(create_leaf("test"), 1, 3).to_string(), "tt")
-        self.assertEqual(delete_range(create_leaf("test"), 2, 4).to_string(), "te")
-        self.assertEqual(delete_range(create_leaf("test"), 0, 2).to_string(), "st")
+        self.assertEqual(str(delete_range(create_leaf("test"), 1, 3)), "tt")
+        self.assertEqual(str(delete_range(create_leaf("test"), 2, 4)), "te")
+        self.assertEqual(str(delete_range(create_leaf("test"), 0, 2)), "st")
 
     def test_insertion(self):
-        self.assertEqual(insert(create_leaf("test"), "123", 2).to_string(), "te123st")
-        self.assertEqual(insert(create_leaf("test"), "123", 4).to_string(), "test123")
-        self.assertEqual(insert(create_leaf("test"), "123", 0).to_string(), "123test")
+        self.assertEqual(str(insert(create_leaf("test"), "123", 2)), "te123st")
+        self.assertEqual(str(insert(create_leaf("test"), "123", 4)), "test123")
+        self.assertEqual(str(insert(create_leaf("test"), "123", 0)), "123test")
 
     def test_extra_credit_rebalancing(self):
         self.assertEqual(
@@ -47,8 +47,9 @@ class Testing(unittest.TestCase):
                 )
             ).to_dictionary(),
             {
-                "left": {"left": {"text": "a"}, "right": {"text": "b"}},
-                "right": {"left": {"text": "c"}, "right": {"text": "d"}},
+                "size": 4,
+                "left": {"size": 2, "left": {"text": "a"}, "right": {"text": "b"}},
+                "right": {"size": 2, "left": {"text": "c"}, "right": {"text": "d"}},
             },
         )
 
